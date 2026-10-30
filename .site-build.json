@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "files": [
+    ".nojekyll",
+    "assets/books.svg",
+    "assets/desk.svg",
+    "assets/dm-sans-latin-ext-wght-normal-BOFOeGcA.woff2",
+    "assets/dm-sans-latin-wght-normal-Xz1IZZA0.woff2",
+    "assets/green.svg",
+    "assets/index-BVVR7inv.js",
+    "assets/index-C6HQGbAe.css",
+    "assets/manrope-cyrillic-wght-normal-Dvxsihut.woff2",
+    "assets/manrope-greek-wght-normal-DL7QRZyv.woff2",
+    "assets/manrope-latin-ext-wght-normal-Ch3YOpNY.woff2",
+    "assets/manrope-latin-wght-normal-DHIcAJRg.woff2",
+    "assets/manrope-vietnamese-wght-normal-usUDDRr7.woff2",
+    "assets/sport.svg",
+    "assets/sunset.svg",
+    "assets/tech.svg",
+    "assets/world.svg",
+    "index.html"
+  ]
+}

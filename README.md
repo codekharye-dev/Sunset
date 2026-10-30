@@ -1,42 +1,48 @@
 # Sunset
 
-AZ, EN və TR dillərində nümunə xəbər blogu. Bütün hekayələr **Nümunə / Sample / Örnek** kimi işarələnib.
+AZ, EN və TR dillərində nümunə xəbər blogu. Yeni React versiyası hazır statik fayllarla birlikdə bu repozitoriyadadır. Bütün hekayələr **Nümunə / Sample / Örnek** kimi işarələnib.
 
-## Açılış
+## Quruluş
 
-`index.html` faylını brauzerdə aç və ya Python 3 ilə `npm run dev` əmrini işə sal. İstehsal üçün server, verilənlər bazası və build addımı lazım deyil. Bütün şəkillər layihədədir; şriftlər üçün Google Fonts istifadə olunur və şəbəkə olmadıqda sistem şriftləri işləyir.
+- `web/` — React, TypeScript, Tailwind CSS və shadcn quruluşunda mənbə kodu.
+- `index.html`, `assets/`, `.nojekyll` — GitHub Pages-in birbaşa yayımladığı, `web/` mənbəsindən hazırlanmış fayllar.
+- `scripts/publish-static.mjs` — yığımı ana qovluğa köçürür, yalnız əvvəlki yığımın köhnəlmiş fayllarını təmizləyir.
+- `legacy/v1/` — əvvəlki saytın dəyişdirilməmiş tam nüsxəsi. Köhnə sayt `/legacy/v1/` yolunda ayrıca açılır.
+- `backup/sunset-v1-d6f9191` — GitHub-da əvvəlki işlək versiyanı saxlayan branch.
 
-## Funksiyalar
+## İnkişaf və test
 
-- Açıq və qaranlıq rejim; seçim brauzerdə yadda qalır.
-- İnterfeys və yeddi nümunə hekayə üçün AZ / EN / TR tərcümələri.
-- Başlıq və məzmuna görə axtarış, kateqoriya filtrləri, oxuma müddətinə görə sıralama.
-- Brauzerdə saxlanılan oxu siyahısı və açılmış hekayələr üçün oxunma nişanı.
-- Tam nümunə mətnli oxuma pəncərəsi, mətn ölçüsü, növbəti hekayə və paylaşım keçidləri.
-- Paylaşım keçidi birbaşa hekayəni açır. Buferə çıxış mümkün olmadıqda əl ilə kopyalama sahəsi göstərilir.
-- Scroll animasiyaları, kart keçidləri və `prefers-reduced-motion` dəstəyi.
-- Mobil menyu, klaviatura dəstəyi, bildirişlər və yuxarı qayıt düyməsi.
-
-## Demo sərhədləri
-
-Abunə forması yalnız brauzerdə demo abunə vəziyyətini saxlayır. E-poçt ünvanı saxlanılmır və məktub göndərilmir. Xəritə, sosial hesablar və əlaqə ünvanı nümunədir; düymələr bunu izah edən məlumat pəncərəsini açır. Real göndəriş və profillər üçün ayrıca xidmət və ünvanlar əlavə edilməlidir. Məlumatlar cihazlar arasında sinxronlaşmır.
-
-## Testlər
+Node.js 20+ və Python 3 ilə:
 
 ```sh
-npm ci
-npx playwright install chromium
+npm run setup
+npm run dev
 npm test
 ```
 
-Sistem Chromium-u `/usr/bin/chromium` yolunda olduqda avtomatik istifadə edilir. Başqa yol üçün `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` təyin etmək olar. Testlər öz yerli serverini 3131 portunda başladır və sonunda dayandırır.
+Testlər üçün Chromium lazımdır. Sistem Chromium-u yoxdursa: `cd web` və `npx playwright install chromium`. Başqa icra faylı üçün `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` istifadə olunur.
 
-## GitHub Pages
+## Saytı yeniləmək
 
-**Settings → Pages → Build and deployment** bölməsində:
+```sh
+npm run build
+npm run preview
+```
 
-- **Source:** Deploy from a branch
-- **Branch:** main
-- **Folder:** / (root)
+Build əmri TypeScript yoxlamasını və Vite yığımını işlədir, sonra nəticəni hazır GitHub Pages ana qovluğuna köçürür. Mənbə və yaradılmış fayllar birlikdə commit olunmalıdır. `assets/` qovluğunu əl ilə dəyişmək əvəzinə şəkilləri `web/public/assets/` daxilində yenilə.
 
-**Save** düyməsini seç. Sonrakı `main` yeniləmələrini GitHub Pages avtomatik yayımlayır.
+GitHub Pages ayarı **Deploy from a branch → main → / (root)** olaraq qalır. Əlavə Actions icazəsi və ya yeni hostinq quruluşu tələb olunmur. Hash marşrutları ayrıca server yönləndirməsi olmadan işləyir.
+
+## Əvvəlki versiyaya qayıtmaq
+
+Əvvəlki sayt `legacy/v1/index.html` daxilindədir və Git tarixçəsi də qorunur. Tam köhnə vəziyyət GitHub-da `backup/sunset-v1-d6f9191` branch-ində saxlanılır. Yeni tarixçəni silmək və ya force-push etmək əvəzinə dəyişiklik commit-i `git revert` ilə geri alına bilər.
+
+## Funksiyalar
+
+Ayrı ana səhifə, kəşf, mövzu, məqalə, oxu siyahısı, seçimlər və haqqımızda səhifələri; əyilmiş 3D şəkil lenti; axtarış, filtrlər, sıralama və səhifələmə; oxuma gedişi və davam etmə; mətn ölçüsü, diqqət rejimi, paylaşım və saxlanılanlar.
+
+Dil, görünüş və oxu seçimləri `sunset.v2.*` açarlarında saxlanılır. Mövcud `sunset.*` seçimləri ilk açılışda oxunur, silinmir və dəyişdirilmir. Bu, köhnə versiyaya qayıdanda əvvəlki seçimlərin də qalmasını təmin edir.
+
+Göndərilmiş `TiltedGridHero` komponenti `web/src/components/ui/tilted-grid-hero.tsx` daxilindədir. shadcn alias-ları `web/components.json`, Tailwind və dizayn dəyişənləri `web/src/styles.css`, `cn` köməkçisi `web/src/lib/utils.ts` fayllarındadır. Yeni shadcn komponenti üçün `web/` daxilində `npx shadcn@latest add <component>` istifadə oluna bilər.
+
+Abunə forması demodur: e-poçt saxlanılmır və məktub göndərilmir. Bütün xəbərlər, ünvanlar və sosial hesablar nümunədir.

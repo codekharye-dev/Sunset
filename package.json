@@ -1,13 +1,17 @@
 {
   "name": "sunset",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "python3 -m http.server 3000 --bind 0.0.0.0",
-    "start": "python3 -m http.server 3000 --bind 0.0.0.0",
-    "test": "node --test tests/browser.test.cjs"
+    "setup": "npm --prefix web ci",
+    "dev": "npm --prefix web run dev",
+    "build": "npm --prefix web run build && node scripts/publish-static.mjs",
+    "test": "npm --prefix web test",
+    "preview": "python3 -m http.server 3000 --bind 0.0.0.0",
+    "format:check": "npm --prefix web run format:check"
   },
-  "devDependencies": {
-    "playwright": "1.62.1"
+  "engines": {
+    "node": ">=20"
   }
 }
