@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import {
   ArrowUpRight,
   ArrowRight,
-  Bookmark,
   Search,
   Menu,
   X,
@@ -11,7 +10,6 @@ import {
   Moon,
   Heart,
   Newspaper,
-  MessageCircle,
   Instagram,
   ArrowUp,
   Mail,
@@ -19,13 +17,15 @@ import {
 } from 'lucide-react';
 import { articles, asset, categories } from '@/lib/content';
 import { useRoute, useSunset, go } from '@/lib/state';
-import { ActionLink, LanguageSwitch, Logo, ThemeSwitch } from './common';
+import { LanguageSwitch, Logo, ThemeSwitch } from './common';
 import { Button } from './ui/button';
+import NavigationMenuWithActiveItem from './ui/navigation-menu-05';
 export function Header() {
-  const { t, saved } = useSunset();
+  const { t } = useSunset();
   const { path } = useRoute();
   const [menu, setMenu] = useState(false);
   const [search, setSearch] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
   useEffect(() => setMenu(false), [path]);
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
@@ -33,17 +33,16 @@ export function Header() {
         e.preventDefault();
         setSearch((s) => !s);
       }
-      if (e.key === 'Escape') setMenu(false);
+      if (e.key === 'Escape') {
+        setMenu((open) => {
+          if (open) menuButton.current?.focus();
+          return false;
+        });
+      }
     };
     addEventListener('keydown', key);
     return () => removeEventListener('keydown', key);
   }, []);
-  const links = [
-    ['/', t('home')],
-    ['/discover', t('explore')],
-    ['/saved', t('list')],
-    ['/about', t('aboutNav')],
-  ];
   return (
     <>
       {import.meta.env.DEV && (
@@ -58,27 +57,17 @@ export function Header() {
       <header className="site-header">
         <div className="header-inner shell">
           <Logo />
-          <nav
-            className={`main-nav ${menu ? 'open' : ''}`}
-            id="main-nav"
-            aria-label={t('sections')}
-          >
-            {links.map(([href, text]) => (
-              <a key={href} href={`#${href}`} aria-current={path === href ? 'page' : undefined}>
-                {text}
-                {href === '/saved' && <span className="nav-count">{saved.length}</span>}
-              </a>
-            ))}
-          </nav>
+          <NavigationMenuWithActiveItem open={menu} onNavigate={() => setMenu(false)} />
           <div className="header-actions">
-            <LanguageSwitch />
+            <LanguageSwitch compact />
             <ThemeSwitch />
             <button
               className="icon-button search-trigger"
               onClick={() => setSearch(true)}
               aria-label={t('search')}
             >
-              <Search size={20} />
+              <Search size={18} />
+              <kbd aria-hidden="true">⌘ K</kbd>
             </button>
             <a
               className="icon-button settings-link"
@@ -89,6 +78,7 @@ export function Header() {
               <Settings2 size={18} />
             </a>
             <button
+              ref={menuButton}
               className="icon-button menu-trigger"
               onClick={() => setMenu((s) => !s)}
               aria-label={t('menu')}
@@ -288,6 +278,14 @@ export function Footer() {
             {t('learnMore')}
             <ArrowUpRight size={15} />
           </a>
+          <div className="footer-extra-links">
+            <a href="#/collections">
+              {t('collections')} <ArrowUpRight size={14} />
+            </a>
+            <a href="#/daily">
+              {t('daily')} <ArrowUpRight size={14} />
+            </a>
+          </div>
           <small className="footer-sample-note">{t('sample')}</small>
         </div>
         <div>

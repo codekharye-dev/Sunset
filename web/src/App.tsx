@@ -12,6 +12,8 @@ import Story from '@/pages/Story';
 import Saved from '@/pages/Saved';
 import Preferences from '@/pages/Preferences';
 import About from '@/pages/About';
+import Collections from '@/pages/Collections';
+import Daily from '@/pages/Daily';
 function Site() {
   const { path, params } = useRoute();
   const { t, notification, lang } = useSunset();
@@ -23,17 +25,21 @@ function Site() {
   useEffect(() => {
     const name = path.startsWith('/story/')
       ? articles.find((a) => a.id === path.split('/')[2])?.text[lang]?.title || t('readingRoom')
-      : path === '/saved'
-        ? t('list')
-        : path === '/preferences'
-          ? t('settings')
-          : path === '/about'
-            ? t('aboutNav')
-            : path.startsWith('/topic/')
-              ? t(path.split('/')[2])
-              : path === '/discover'
-                ? t('explore')
-                : t('heroTop');
+      : path.startsWith('/collections')
+        ? t('collections')
+        : path === '/daily'
+          ? t('daily')
+          : path === '/saved'
+            ? t('list')
+            : path === '/preferences'
+              ? t('settings')
+              : path === '/about'
+                ? t('aboutNav')
+                : path.startsWith('/topic/')
+                  ? t(path.split('/')[2])
+                  : path === '/discover'
+                    ? t('explore')
+                    : t('heroTop');
     document.title = `Sunset — ${name}`;
   }, [path, t, lang]);
   let page;
@@ -45,6 +51,9 @@ function Site() {
   else if (path === '/saved') page = <Saved />;
   else if (path === '/preferences') page = <Preferences />;
   else if (path === '/about') page = <About />;
+  else if (path === '/collections') page = <Collections />;
+  else if (/^\/collections\/[^/]+$/.test(path)) page = <Collections id={path.split('/')[2]} />;
+  else if (path === '/daily') page = <Daily />;
   else
     page = (
       <div className="shell page-padding">

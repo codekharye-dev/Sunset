@@ -214,6 +214,9 @@ test('mobile menu, themes and all major pages have no horizontal overflow', asyn
       '/story/evening',
       '/preferences',
       '/about',
+      '/collections',
+      '/collections/slow-living',
+      '/daily',
     ]) {
       await page.goto(`/#${path}`);
       await expect
@@ -229,6 +232,91 @@ test('mobile menu, themes and all major pages have no horizontal overflow', asyn
   await expect(page.locator('.main-nav')).toBeVisible();
   await page.locator('.main-nav').getByRole('link', { name: 'Kəşf et', exact: true }).click();
   await expect(page).toHaveURL(/#\/discover/);
+  await expect(page.locator('.main-nav')).toBeHidden();
+});
+
+test('collections open curated detail pages and keep their navigation active', async ({ page }) => {
+  await page.goto('/#/collections');
+  await expect(page.locator('.collection-card')).toHaveCount(4);
+  await expect(page.locator('.main-nav a[aria-current="page"]')).toHaveText('Seçmələr');
+  await page.locator('.collection-card').first().click();
+  await expect(page).toHaveURL(/#\/collections\/slow-living/);
+  await expect(page.locator('h1')).toHaveText('Bir az yavaşla');
+  await expect(page.locator('.story-card')).toHaveCount(4);
+  await expect(page.locator('.main-nav a[aria-current="page"]')).toHaveText('Seçmələr');
+  await page.getByRole('link', { name: 'İlk hekayədən başla' }).click();
+  await expect(page).toHaveURL(/#\/story\/evening/);
+  await expect(page.locator('.main-nav a[aria-current="page"]')).toHaveText('Kəşf et');
+  await page.goto('/#/collections/not-a-collection');
+  await expect(page.locator('.empty-state')).toBeVisible();
+});
+
+test('reading plans respect every time budget and mood, offer alternatives, and save without duplicates', async ({
+  page,
+}) => {
+  await page.goto('/#/daily');
+  for (const budget of [5, 10, 15]) {
+    await page.getByRole('button', { name: new RegExp(`^${budget}\\s*dəq$`) }).click();
+    for (const mood of ['Bir az hər şeydən', 'İlham axtarıram', 'Bir az sakitlik']) {
+      await page.getByRole('button', { name: mood, exact: true }).click();
+      for (let alternative = 0; alternative < 6; alternative++) {
+        const times = await page.locator('.daily-story-meta').allTextContents();
+        const total = times.reduce((sum, text) => sum + Number(text.match(/(\d+) dəq/)?.[1]), 0);
+        expect(total).toBeGreaterThan(0);
+        expect(total).toBeLessThanOrEqual(budget);
+        await expect(page.locator('.plan-duration')).toContainText(`${total} dəq`);
+        const links = await page
+          .locator('.daily-story')
+          .evaluateAll((nodes) => nodes.map((n) => n.getAttribute('href')));
+        expect(new Set(links).size).toBe(links.length);
+        await page.getByRole('button', { name: 'Başqa seçim göstər' }).click();
+      }
+    }
+  }
+  const first = await page.locator('.daily-story').first().getAttribute('href');
+  await page.getByRole('button', { name: 'Başqa seçim göstər' }).click();
+  expect(await page.locator('.daily-story').first().getAttribute('href')).not.toBe(first);
+  const ids = await page
+    .locator('.daily-story')
+    .evaluateAll((nodes) => nodes.map((n) => n.getAttribute('href')?.split('/').pop()));
+  await page.getByRole('button', { name: 'Siyahıya saxla', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Siyahındadır' })).toBeDisabled();
+  const saved = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem('sunset.v2.saved') || '[]'),
+  );
+  expect(saved).toEqual(ids);
+  await page.getByRole('link', { name: 'Oxumağa başla', exact: true }).click();
+  await page.getByRole('button', { name: 'Oxudum', exact: true }).click();
+  await page.goto('/#/daily');
+  // Completed stories are reflected when they appear in a later plan.
+  const completedId = ids[0];
+  const history = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem('sunset.v2.history') || '{}'),
+  );
+  expect(history[completedId!].completed).toBe(true);
+  await page.goto('/#/saved');
+  await expect(page.locator('.saved-grid .story-card')).toHaveCount(ids.length);
+});
+
+test('new pages translate and the mobile menu closes on selection and Escape', async ({ page }) => {
+  await page
+    .locator('.header-actions')
+    .getByRole('button', { name: 'English', exact: true })
+    .click();
+  await page.goto('/#/collections');
+  await expect(page.locator('h1')).toContainText('One theme, fresh perspectives');
+  await page.goto('/#/daily');
+  await expect(page.locator('h1')).toContainText('A little pause in your day');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator('.mobile-language-select').selectOption('tr');
+  await expect(page.locator('h1')).toContainText('Güne küçük bir mola');
+  await page.getByRole('button', { name: 'Menü', exact: true }).click();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.main-nav')).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Menü', exact: true })).toBeFocused();
+  await page.getByRole('button', { name: 'Menü', exact: true }).click();
+  await page.locator('.main-nav').getByRole('link', { name: 'Seçkiler', exact: true }).click();
+  await expect(page.locator('h1')).toContainText('Bir konu, farklı bakışlar');
   await expect(page.locator('.main-nav')).toBeHidden();
 });
 test('corrupt browser preferences are recovered without breaking pages', async ({ page }) => {

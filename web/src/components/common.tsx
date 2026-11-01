@@ -207,10 +207,26 @@ export function ThemeSwitch() {
     </div>
   );
 }
-export function LanguageSwitch() {
+export function LanguageSwitch({ compact = false }: { compact?: boolean }) {
   const { lang, setLang } = useSunset();
   return (
-    <div className="language-switch" role="group" aria-label={lang === 'en' ? 'Language' : 'Dil'}>
+    <div
+      className={`language-switch ${compact ? 'language-switch-compact' : ''}`}
+      role="group"
+      aria-label={lang === 'en' ? 'Language' : 'Dil'}
+    >
+      {compact && (
+        <select
+          className="mobile-language-select"
+          value={lang}
+          aria-label={lang === 'en' ? 'Language' : 'Dil'}
+          onChange={(e) => setLang(e.target.value as 'az' | 'en' | 'tr')}
+        >
+          <option value="az">AZ</option>
+          <option value="en">EN</option>
+          <option value="tr">TR</option>
+        </select>
+      )}
       {(['az', 'en', 'tr'] as const).map((l) => (
         <button
           key={l}

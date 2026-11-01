@@ -41,8 +41,14 @@ GitHub Pages ayarı **Deploy from a branch → main → / (root)** olaraq qalır
 
 Ayrı ana səhifə, kəşf, mövzu, məqalə, oxu siyahısı, seçimlər və haqqımızda səhifələri; əyilmiş 3D şəkil lenti; axtarış, filtrlər, sıralama və səhifələmə; oxuma gedişi və davam etmə; mətn ölçüsü, diqqət rejimi, paylaşım və saxlanılanlar.
 
+**Seçmələr** (`#/collections`) dörd redaksiya kolleksiyasını ayrıca səhifələrdə təqdim edir. **Günün ritmi** (`#/daily`) 5, 10 və ya 15 dəqiqəlik vaxta və əhvala uyğun oxu planı hazırlayır. Alternativ seçimlər vaxt həddini aşmır; plan bir düymə ilə təkrarsız saxlanılır. Oxunmuş hekayələr mövcud oxu tarixçəsindən götürülür. Yeni səhifələr AZ, EN və TR dillərini və hər iki görünüşü dəstəkləyir.
+
 Dil, görünüş və oxu seçimləri `sunset.v2.*` açarlarında saxlanılır. Mövcud `sunset.*` seçimləri ilk açılışda oxunur, silinmir və dəyişdirilmir. Bu, köhnə versiyaya qayıdanda əvvəlki seçimlərin də qalmasını təmin edir.
 
 Göndərilmiş `TiltedGridHero` komponenti `web/src/components/ui/tilted-grid-hero.tsx` daxilindədir. shadcn alias-ları `web/components.json`, Tailwind və dizayn dəyişənləri `web/src/styles.css`, `cn` köməkçisi `web/src/lib/utils.ts` fayllarındadır. Yeni shadcn komponenti üçün `web/` daxilində `npx shadcn@latest add <component>` istifadə oluna bilər.
+
+Göndərilmiş `navigation-menu-05` komponenti `web/src/components/ui/navigation-menu-05.tsx`, onun Radix/shadcn primitivləri `web/src/components/ui/navigation-menu.tsx` daxilindədir. Layihənin standart UI yolu `@/components/ui` → `web/src/components/ui` olduğundan ayrıca kök `components/ui` qovluğu yaratmaq lazım deyil. React, TypeScript, Tailwind və `cn` artıq qurulub; əlavə Radix paketləri `npm run setup` ilə quraşdırılır. Vite və GitHub Pages quruluşuna uyğun olaraq `next/link` yerinə mövcud hash keçidləri istifadə edilir; Next.js əlavə edilmir. Headerin aktiv alt xətti həm ana, həm də daxili səhifələrdə cari bölməni izləyir.
+
+Header və yeni səhifələrin üslubları `web/src/styles/refinements.css` faylındadır. Animasiyalar həm sistemin `prefers-reduced-motion` seçiminə, həm də saytdakı hərəkət parametrinə əməl edir.
 
 Abunə forması demodur: e-poçt saxlanılmır və məktub göndərilmir. Bütün xəbərlər, ünvanlar və sosial hesablar nümunədir.

@@ -7,6 +7,8 @@ import {
   ArrowDown,
   Clock3,
   Asterisk,
+  Layers3,
+  Sunrise,
 } from 'lucide-react';
 import { articles, asset, categories, dateLabel } from '@/lib/content';
 import { useSunset } from '@/lib/state';
@@ -235,6 +237,41 @@ export default function Home() {
                 </a>
               </Reveal>
             ))}
+          </div>
+        </section>
+        <section className="section discovery-section">
+          <Reveal>
+            <SectionTitle eyebrow={t('exploreMore')} title={t('exploreMoreTitle')} />
+          </Reveal>
+          <div className="discovery-grid">
+            <Reveal>
+              <a className="discovery-card discovery-collections" href="#/collections">
+                <div className="discovery-card-top">
+                  <Layers3 size={30} strokeWidth={1.2} />
+                  <span className="mono">01 / SUNSET</span>
+                </div>
+                <h3>{t('collections')}</h3>
+                <p>{t('collectionsTeaser')}</p>
+                <span className="discovery-card-link">
+                  {t('viewCollections')}
+                  <ArrowUpRight size={19} />
+                </span>
+              </a>
+            </Reveal>
+            <Reveal delay={60}>
+              <a className="discovery-card discovery-daily" href="#/daily">
+                <div className="discovery-card-top">
+                  <Sunrise size={32} strokeWidth={1.2} />
+                  <span className="mono">05 · 10 · 15</span>
+                </div>
+                <h3>{t('daily')}</h3>
+                <p>{t('dailyTeaser')}</p>
+                <span className="discovery-card-link">
+                  {t('buildPause')}
+                  <ArrowUpRight size={19} />
+                </span>
+              </a>
+            </Reveal>
           </div>
         </section>
         <Reveal>
