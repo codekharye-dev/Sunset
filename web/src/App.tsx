@@ -14,6 +14,9 @@ import Preferences from '@/pages/Preferences';
 import About from '@/pages/About';
 import Collections from '@/pages/Collections';
 import Daily from '@/pages/Daily';
+import Ideas from '@/pages/Ideas';
+import Notebook from '@/pages/Notebook';
+import { ideas } from '@/lib/ideas';
 function Site() {
   const { path, params } = useRoute();
   const { t, notification, lang } = useSunset();
@@ -25,21 +28,28 @@ function Site() {
   useEffect(() => {
     const name = path.startsWith('/story/')
       ? articles.find((a) => a.id === path.split('/')[2])?.text[lang]?.title || t('readingRoom')
-      : path.startsWith('/collections')
-        ? t('collections')
-        : path === '/daily'
-          ? t('daily')
-          : path === '/saved'
-            ? t('list')
-            : path === '/preferences'
-              ? t('settings')
-              : path === '/about'
-                ? t('aboutNav')
-                : path.startsWith('/topic/')
-                  ? t(path.split('/')[2])
-                  : path === '/discover'
-                    ? t('explore')
-                    : t('heroTop');
+      : path.startsWith('/ideas/')
+        ? ideas.find((idea) => idea.id === path.split('/')[2])?.text[lang].title ||
+          t('ideasLibrary')
+        : path === '/ideas'
+          ? t('ideasLibrary')
+          : path === '/notebook'
+            ? t('notebook')
+            : path.startsWith('/collections')
+              ? t('collections')
+              : path === '/daily'
+                ? t('daily')
+                : path === '/saved'
+                  ? t('list')
+                  : path === '/preferences'
+                    ? t('settings')
+                    : path === '/about'
+                      ? t('aboutNav')
+                      : path.startsWith('/topic/')
+                        ? t(path.split('/')[2])
+                        : path === '/discover'
+                          ? t('explore')
+                          : t('heroTop');
     document.title = `Sunset — ${name}`;
   }, [path, t, lang]);
   let page;
@@ -54,6 +64,9 @@ function Site() {
   else if (path === '/collections') page = <Collections />;
   else if (/^\/collections\/[^/]+$/.test(path)) page = <Collections id={path.split('/')[2]} />;
   else if (path === '/daily') page = <Daily />;
+  else if (path === '/ideas') page = <Ideas key={params.toString()} />;
+  else if (/^\/ideas\/[^/]+$/.test(path)) page = <Ideas id={path.split('/')[2]} />;
+  else if (path === '/notebook') page = <Notebook ideaId={params.get('idea') ?? undefined} />;
   else
     page = (
       <div className="shell page-padding">

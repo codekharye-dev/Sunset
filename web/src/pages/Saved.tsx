@@ -6,7 +6,7 @@ import { EmptyState, StoryCard, SectionTitle } from '@/components/common';
 import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/confirm-dialog';
 export default function Saved() {
-  const { t, lang, saved, setSaved, history } = useSunset();
+  const { t, lang, saved, setSaved, history, savedIdeas } = useSunset();
   const [confirm, setConfirm] = useState(false);
   const list = saved.map((id) => articles.find((a) => a.id === id)!).filter(Boolean);
   const recent = Object.entries(history)
@@ -98,6 +98,13 @@ export default function Saved() {
           ) : (
             <p className="muted">{t('emptyTitle')}</p>
           )}
+          <a href="#/ideas?saved=1" className="sidebar-link">
+            {t('savedIdeas')} ({savedIdeas.length})<ArrowUpRight size={15} />
+          </a>
+          <a href="#/notebook" className="sidebar-link">
+            {t('notebook')}
+            <ArrowUpRight size={15} />
+          </a>
           <a href="#/preferences" className="sidebar-link">
             {t('settings')}
             <ArrowUpRight size={15} />

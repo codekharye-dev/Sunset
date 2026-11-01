@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { articles, locales } from './content';
+import { ideas } from './ideas';
 import type { Lang } from './content';
 export interface Reading {
   progress: number;
@@ -52,6 +53,16 @@ function useLocal<T>(key: string, initial: T, validate: (v: unknown) => v is T) 
   }, [key, state]);
   return [state, setState] as const;
 }
+const ideaIds = new Set(ideas.map((idea) => idea.id));
+const isIdeaIds = (value: unknown): value is string[] =>
+  Array.isArray(value) && value.every((id) => typeof id === 'string' && ideaIds.has(id));
+const isReflections = (value: unknown): value is Record<string, string> =>
+  !!value &&
+  typeof value === 'object' &&
+  !Array.isArray(value) &&
+  Object.entries(value).every(
+    ([id, text]) => ideaIds.has(id) && typeof text === 'string' && text.length <= 2000,
+  );
 const validIds = new Set(articles.map((a) => a.id));
 const isIds = (v: unknown): v is string[] =>
   Array.isArray(v) && v.every((x) => typeof x === 'string' && validIds.has(x));
@@ -82,6 +93,14 @@ function useAppState() {
     (v): v is 'dark' | 'light' => v === 'dark' || v === 'light',
   );
   const [saved, setSaved] = useLocal<string[]>('saved', [], isIds);
+  const [savedIdeas, setSavedIdeas] = useLocal<string[]>('savedIdeas', [], isIdeaIds);
+  const [reflections, setReflections] = useLocal<Record<string, string>>(
+    'reflections',
+    {},
+    isReflections,
+  );
+  const toggleIdea = (id: string) =>
+    setSavedIdeas((old) => (old.includes(id) ? old.filter((item) => item !== id) : [...old, id]));
   const [history, setHistory] = useLocal<History>('history', {}, isHistory);
   const [motion, setMotion] = useLocal<boolean>(
     'motion',
@@ -152,6 +171,10 @@ function useAppState() {
     setTheme,
     saved,
     setSaved,
+    savedIdeas,
+    toggleIdea,
+    reflections,
+    setReflections,
     history,
     setHistory,
     motion,

@@ -51,4 +51,12 @@ Göndərilmiş `navigation-menu-05` komponenti `web/src/components/ui/navigation
 
 Header və yeni səhifələrin üslubları `web/src/styles/refinements.css` faylındadır. Animasiyalar həm sistemin `prefers-reduced-motion` seçiminə, həm də saytdakı hərəkət parametrinə əməl edir.
 
+### Sunset Perspectives
+
+`#/ideas` — mövzu və müəllif üzrə axtarış, ayrıca saxlanılan fikirlər və beş müəllifin mənbəli sitatları. `#/ideas/:id` səhifələrində müəllif haqqında qısa təqdimat, orijinal sitatın mənbəsi, AZ/TR tərcüməsi, ayrıca işarələnmiş Sunset şərhi, gündəlik məşq və əlaqəli hekayələr var. Sitat mənbələri `web/src/lib/ideas.ts` daxilindədir: James Clear-in öz saytı, Steve Jobs-un Stanford çıxışı, Paul Graham-ın essesi və MIT Internet Classics Archive-dəki fəlsəfi mətnlər. Müəllif kartları yerli tipoqrafik SVG illüstrasiyalarıdır.
+
+Göndərilmiş `ScrollReelTestimonials` komponenti `web/src/components/ui/scroll-reel-testimonials.tsx` daxilində Sunset-ə uyğunlaşdırılıb. Qarşı istiqamətlərdə hərəkət edən sütunlar və hərflərlə açılan mətn saxlanılıb; klaviatura oxları, mənbə keçidləri, saxlanılanlar və hərəkəti azaltma dəstəyi əlavə olunub. Üslubları `web/src/styles/inspiration.css` faylındadır. Mövcud React/TypeScript/Tailwind/shadcn quruluşundan istifadə edir; əlavə paket quraşdırmaq lazım deyil.
+
+`#/notebook?idea=:id` — müəllifin sualına şəxsi cavab yazmaq üçün dəftər. Qeydlər `sunset.v2.reflections`, saxlanılan fikirlər `sunset.v2.savedIdeas` açarlarında yalnız bu brauzerdə qalır. Hesab və server sinxronizasiyası yoxdur. Qeydlər UTF-8 mətn faylı kimi endirilə bilər; silmə yalnız seçilmiş müəllifin qeydinə tətbiq olunur və təsdiq tələb edir. Mövcud məqalə siyahısı və oxu tarixçəsi ayrıca saxlanılır.
+
 Abunə forması demodur: e-poçt saxlanılmır və məktub göndərilmir. Bütün xəbərlər, ünvanlar və sosial hesablar nümunədir.

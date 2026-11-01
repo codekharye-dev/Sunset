@@ -16,6 +16,7 @@ import { TiltedGridHero } from '@/components/ui/tilted-grid-hero';
 import { Button } from '@/components/ui/button';
 import { ActionLink, Reveal, SectionTitle, StoryCard, CategoryIcon } from '@/components/common';
 import { Newsletter } from '@/components/layout';
+import { InspirationSection } from '@/components/inspiration';
 const images = articles.slice(0, 7).map((a) => ({ src: asset(a.image) }));
 export default function Home() {
   const { t, lang, motion, setMotion, reduced, systemReduced, history } = useSunset();
@@ -162,6 +163,7 @@ export default function Home() {
             </div>
           </section>
         </Reveal>
+        <InspirationSection />
         <section className="section latest-section">
           <Reveal>
             <SectionTitle

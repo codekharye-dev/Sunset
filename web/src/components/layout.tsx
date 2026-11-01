@@ -279,6 +279,12 @@ export function Footer() {
             <ArrowUpRight size={15} />
           </a>
           <div className="footer-extra-links">
+            <a href="#/ideas">
+              {t('inspiration')} <ArrowUpRight size={14} />
+            </a>
+            <a href="#/notebook">
+              {t('notebook')} <ArrowUpRight size={14} />
+            </a>
             <a href="#/collections">
               {t('collections')} <ArrowUpRight size={14} />
             </a>

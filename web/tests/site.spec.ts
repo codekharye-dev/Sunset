@@ -217,6 +217,9 @@ test('mobile menu, themes and all major pages have no horizontal overflow', asyn
       '/collections',
       '/collections/slow-living',
       '/daily',
+      '/ideas',
+      '/ideas/steve-jobs',
+      '/notebook',
     ]) {
       await page.goto(`/#${path}`);
       await expect

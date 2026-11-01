@@ -1,4 +1,4 @@
-import { Bookmark, Compass, Home, Layers3, Sunrise } from 'lucide-react';
+import { Bookmark, Compass, Home, Layers3, Sunrise, Lightbulb } from 'lucide-react';
 import { useRoute, useSunset } from '@/lib/state';
 import { cn } from '@/lib/utils';
 import {
@@ -31,6 +31,12 @@ export default function NavigationMenuWithActiveItem({
       icon: Layers3,
       active: path.startsWith('/collections'),
     },
+    {
+      title: t('inspiration'),
+      href: '/ideas',
+      icon: Lightbulb,
+      active: path.startsWith('/ideas') || path === '/notebook',
+    },
     { title: t('daily'), href: '/daily', icon: Sunrise, active: path === '/daily' },
     { title: t('list'), href: '/saved', icon: Bookmark, active: path === '/saved' },
   ];
@@ -55,6 +61,9 @@ export default function NavigationMenuWithActiveItem({
           </NavigationMenuItem>
         ))}
       </NavigationMenuList>
+      <a className="mobile-about-link mobile-notebook-link" href="#/notebook" onClick={onNavigate}>
+        {t('notebook')}
+      </a>
       <a className="mobile-about-link" href="#/about" onClick={onNavigate}>
         {t('aboutNav')}
       </a>

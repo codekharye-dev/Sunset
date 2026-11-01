@@ -166,6 +166,14 @@ export default function Daily() {
           </div>
         </section>
       </div>
+      <a href="#/ideas" className="daily-inspiration-note">
+        <Sparkles size={25} strokeWidth={1.1} />
+        <span>
+          <strong>{t('dailyIdeaTitle')}</strong>
+          <small>{t('dailyIdeaSub')}</small>
+        </span>
+        <ArrowUpRight size={20} />
+      </a>
     </div>
   );
 }
